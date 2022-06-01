@@ -8,6 +8,9 @@ from drf_api.permissions import IsOwnerOrReadOnly
 
 
 class ProfileList(APIView):
+    """
+    List all profiles
+    """
     def get(self, request):
         profiles = Profile.objects.all()
         serializer = ProfileSerializer(profiles, many=True, context={'request': request})
@@ -15,25 +18,39 @@ class ProfileList(APIView):
 
 
 class ProfileDetail(APIView):
+    """
+    Display profile details
+    """
     serializer_class = ProfileSerializer
     permission_classes = [IsOwnerOrReadOnly]
 
     def get_object(self, pk):
+        """
+        Retreive profile details
+        """
         try:
             profile = Profile.objects.get(pk=pk)
             self.check_object_permissions(self.request, profile)
             return profile
         except Profile.DoesNotExist:
             raise Http404
-        
+      
     def get(self, request, pk):
+        """
+        display profile details
+        """
         profile = self.get_object(pk)
         serializer = ProfileSerializer(profile, context={'request': request})
         return Response(serializer.data)
 
     def put(self, request, pk):
+        """
+        Update profile details
+        """
         profile = self.get_object(pk)
-        serializer = ProfileSerializer(profile, data=request.data, context={'request': request})
+        serializer = ProfileSerializer(
+            profile, data=request.data, context={'request': request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
