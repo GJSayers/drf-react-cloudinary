@@ -73,6 +73,9 @@ class PostDetailViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
     
     def test_user_cant_update_others_posts(self):
+        """
+        ***Issue with this test returning 200 response***
+        """
         self.client.login(
             username='gemma',
             password='pass'
