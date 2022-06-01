@@ -32,3 +32,50 @@ class PostListViewTests(APITestCase):
     def test_logged_out_user_cant_create_post(self):
         response = self.client.post('/posts/', {'title': 'a title'})
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+class PostDetailViewTests(APITestCase):
+    def setUp(self):
+        gemma = User.objects.create_user(
+            username='gemma',
+            password='pass'
+        )
+        tester = User.objects.create_user(
+            username='tester',
+            password='pass'
+        )
+        Post.objects.create(
+            owner=gemma,
+            title='gemmas title',
+            content='gemmas content'
+        )
+        Post.objects.create(
+            owner=tester,
+            title='tester title',
+            content='tester content'
+        )
+    def test_can_retreive_post_using_valid_id(self):
+        response = self.client.get('/posts/1/')
+        self.assertEqual(response.data['title'], 'gemmas title')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_cant_retreive_post_using_invalid_id(self):
+        response = self.client.get('/posts/77')
+        self.assertEqual(response.status_code, status.HTTP_301_MOVED_PERMANENTLY)
+
+    def test_user_can_update_own_post(self):
+        self.client.login(
+            username='gemma',
+            password='pass'
+        )
+        response = self.client.put('/posts/1/', {'title': 'a new title'})
+        post = Post.objects.filter(pk=1).first()
+        self.assertEqual(post.title, 'a new title')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    
+    def test_user_cant_update_others_posts(self):
+        self.client.login(
+            username='gemma',
+            password='pass'
+        )
+        response = self.client.put('/posts/1/', {'title': 'a new title'})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
