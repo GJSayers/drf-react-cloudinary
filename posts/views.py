@@ -9,7 +9,7 @@ from drf_api.permissions import IsOwnerOrReadOnly
 
 class PostList(APIView):
     """
-    List all posts
+    List all posts (this view can be refactored to use generics)
     """
     serializer_class = PostSerializer
     permission_classes = [
@@ -18,7 +18,7 @@ class PostList(APIView):
 
     def get(self, request):
         """
-        Get all posts
+        Get all posts (this view can be refactored to use generics)
         """
         posts = Post.objects.all()
         serializer = PostSerializer(
@@ -28,7 +28,7 @@ class PostList(APIView):
 
     def post(self, request):
         """
-        Create a post
+        Create a post  (this view can be refactored to use generics)
         """
         serializer = PostSerializer(
             data=request.data, context={'request': request}
@@ -45,7 +45,7 @@ class PostList(APIView):
 
 class PostDetail(APIView):
     """
-    View post detail
+    View post detail (this view can be refactored to use generics)
     """
     serializer_class = PostSerializer
     permission_classes = [
@@ -65,7 +65,7 @@ class PostDetail(APIView):
 
     def get(self, request, pk):
         """
-        Get post detail 
+        Get post detail (this view can be refactored to use generics)
         """
         post = self.get_object(pk)
         serializer = PostSerializer(
@@ -76,7 +76,7 @@ class PostDetail(APIView):
 
     def put(self, request, pk):
         """
-        Update post
+        Update post (this view can be refactored to use generics)
         """
         post = self.get_object(pk)
         serializer = PostSerializer(
@@ -91,7 +91,7 @@ class PostDetail(APIView):
 
     def delete(self, request, pk):
         """
-        Update post
+        Update post (this view can be refactored to use generics)
         """
         post = self.get_object(pk)
         post.delete()
