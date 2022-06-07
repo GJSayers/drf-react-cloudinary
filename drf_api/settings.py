@@ -62,7 +62,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = 'DEV' in os.environ
 
 ALLOWED_HOSTS = [
-    'gemma-moments-drf-api.herokuapp.com', 'localhost'
+    'gemma-moments-drf-api.herokuapp.com',
+    'localhost',
 ]
 
 if 'CLIENT_ORIGIN' in os.environ:
